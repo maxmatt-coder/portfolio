@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>김태원 | 기계시스템공학 학업 포트폴리오</title>
+<meta name="description" content="현장을 이해하고, 데이터를 통해 개선하는 엔지니어">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  /* ===== 디자인 기준: 색은 여기서만 바꾼다 ===== */
+  :root {
+    --main: #1F4E9A;   /* 주색 (남색) 1개만 */
+    --bg: #FFFFFF;     /* 배경색 */
+    --text: #222222;   /* 글자색 */
+    --gray: #6B7280;   /* 보조 회색 (날짜·설명용) */
+    --line: #E5E7EB;   /* 구분선 */
+    --box: #EEF0F3;    /* 사진 자리 회색 상자 */
+    --font: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
+            "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  body {
+    font-family: var(--font); background: var(--bg); color: var(--text);
+    font-size: 16px; line-height: 1.75; word-break: keep-all; overflow-wrap: anywhere;
+  }
+  a { color: var(--main); }
+  ul { list-style: none; }
+  img { display: block; max-width: 100%; }
+  .wrap { width: min(1080px, 100% - 40px); margin: 0 auto; }
+
+  /* ===== 위쪽 메뉴 ===== */
+  .top {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(255, 255, 255, .94); backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  .top .wrap { display: flex; align-items: center; justify-content: space-between; min-height: 60px; }
+  .brand { font-weight: 700; font-size: 1.05rem; color: var(--text); text-decoration: none; }
+  .brand::before {
+    content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+    background: var(--main); margin-right: 8px; vertical-align: middle;
+  }
+  .nav { display: flex; gap: 4px; }
+  .nav a {
+    display: block; padding: 8px 10px; border-radius: 6px;
+    font-size: .92rem; color: var(--gray); text-decoration: none; white-space: nowrap;
+  }
+  .nav a:hover, .nav a.on { color: var(--main); }
+  .nav a.on { font-weight: 600; }
+  .menu-btn {
+    display: none; width: 44px; height: 44px; border: 1px solid var(--line); border-radius: 8px;
+    background: var(--bg); cursor: pointer; align-items: center; justify-content: center;
+  }
+  .menu-btn span, .menu-btn span::before, .menu-btn span::after {
+    content: ""; display: block; width: 18px; height: 2px; background: var(--text); position: relative;
+  }
+  .menu-btn span::before { position: absolute; top: -6px; }
+  .menu-btn span::after { position: absolute; top: 6px; }
+
+  /* ===== 첫 화면 ===== */
+  .hero { border-bottom: 1px solid var(--line); overflow: hidden; }
+  .hero .wrap {
+    display: grid; grid-template-columns: 1.25fr 1fr; align-items: center; gap: 24px;
+    padding: 96px 0 88px;
+  }
+  .hero .site { font-size: .92rem; font-weight: 600; color: var(--main); letter-spacing: .02em; }
+  .hero h1 {
+    margin: 18px 0 30px; font-size: clamp(2rem, 4.6vw, 3.4rem);
+    line-height: 1.28; font-weight: 700; letter-spacing: -.02em;
+  }
+  .hero h1 em { font-style: normal; color: var(--main); }
+  .keywords { display: flex; flex-wrap: wrap; gap: 8px; }
+  .keywords li {
+    padding: 6px 14px; border: 1px solid var(--line); border-radius: 999px;
+    font-size: .92rem; color: var(--gray);
+  }
+  .keywords li::before {
+    content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--main); margin-right: 8px; vertical-align: middle;
+  }
+  .hero svg { width: 100%; max-width: 400px; height: auto; justify-self: end; }
+
+  /* ===== 섹션 공통 ===== */
+  section[id] { padding: 88px 0; border-bottom: 1px solid var(--line); scroll-margin-top: 60px; }
+  .sec-head { display: flex; align-items: center; gap: 14px; margin-bottom: 40px; }
+  .sec-head .no { font-size: .85rem; font-weight: 600; color: var(--main); letter-spacing: .08em; }
+  .sec-head h2 { font-size: 1.6rem; font-weight: 700; letter-spacing: -.01em; }
+  .sec-head::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+  .todo {
+    display: inline-block; padding: 0 .4em; border: 1px dashed #C5CAD3; border-radius: 4px;
+    font-size: .88em; color: var(--gray); line-height: 1.6;
+  }
+
+  /* 사진 자리: 파일이 없으면 회색 상자만 보인다 */
+  .ph {
+    position: relative; background: var(--box); overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    font-size: .82rem; color: #9AA1AC;
+  }
+  .ph img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+  /* ===== 소개 ===== */
+  .about { display: grid; grid-template-columns: 200px 1fr; gap: 40px; align-items: center; }
+  .about .ph { aspect-ratio: 3 / 4; border-radius: 8px; }
+  .about p { font-size: 1.15rem; line-height: 1.9; }
+
+  /* ===== 전공·학업 ===== */
+  .rows > div {
+    display: grid; grid-template-columns: 220px 1fr; gap: 16px;
+    padding: 16px 0; border-top: 1px solid var(--line);
+  }
+  .rows > div:last-child { border-bottom: 1px solid var(--line); }
+  .rows dt { font-weight: 600; color: var(--main); }
+
+  /* ===== 대표 경험: PC 2열, 휴대폰 1열 ===== */
+  .cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; }
+  .card { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--bg); }
+  .card .ph { aspect-ratio: 16 / 9; }
+  .card-body { padding: 24px; }
+  .card .no { font-size: .82rem; font-weight: 600; color: var(--main); letter-spacing: .08em; }
+  .card h3 { margin-top: 4px; font-size: 1.25rem; line-height: 1.4; }
+  .card .meta { font-size: .9rem; color: var(--gray); }
+  .card .desc { margin-top: 14px; font-size: .95rem; }
+  .more {
+    margin-top: 18px; min-height: 44px; padding: 8px 18px; border: 1px solid var(--main); border-radius: 8px;
+    background: var(--bg); color: var(--main); font: inherit; font-size: .92rem; font-weight: 600; cursor: pointer;
+  }
+  .more:hover { background: var(--main); color: #FFFFFF; }
+  a.more { display: inline-flex; align-items: center; margin-left: 6px; text-decoration: none; }
+  .card .src { margin-top: 6px; padding-top: 12px; border-top: 1px solid var(--line); font-size: .85rem; color: var(--gray); }
+
+  /* ===== 자세히 보기 팝업 ===== */
+  html:has(dialog[open]) { overflow: hidden; }
+  dialog {
+    width: min(640px, 100% - 32px); max-height: 85vh; margin: auto; padding: 0;
+    border: 0; border-radius: 12px; background: var(--bg); color: var(--text); overflow: auto;
+  }
+  dialog::backdrop { background: rgba(17, 24, 39, .55); }
+  .pop { position: relative; padding: 32px; }
+  .pop .x {
+    position: absolute; top: 14px; right: 14px; width: 44px; height: 44px; border: 0; border-radius: 8px;
+    background: none; font-size: 1.6rem; line-height: 1; color: var(--gray); cursor: pointer;
+  }
+  .pop .x:hover { color: var(--main); }
+  .pop h3 { padding-right: 44px; }
+  .detail { margin-top: 18px; }
+  .detail > div { display: grid; grid-template-columns: 84px 1fr; gap: 12px; padding: 14px 0; border-top: 1px solid var(--line); }
+  .detail dt { font-weight: 700; color: var(--main); }
+  .detail dd { font-size: .95rem; }
+
+  /* ===== 역량 ===== */
+  .skills { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .skills li { padding: 18px 20px; border: 1px solid var(--line); border-radius: 10px; border-top: 2px solid var(--main); }
+  .skills strong { display: block; font-size: 1rem; line-height: 1.5; }
+  .skills span { display: block; margin-top: 6px; font-size: .88rem; color: var(--gray); }
+  .skills .todo { display: inline-block; }
+
+  /* ===== 자격·교육, 대외활동 ===== */
+  .list li { position: relative; padding: 16px 0 16px 22px; border-top: 1px solid var(--line); }
+  .list li:last-child { border-bottom: 1px solid var(--line); }
+  .list li::before {
+    content: ""; position: absolute; left: 2px; top: 1.75em;
+    width: 6px; height: 6px; border-radius: 50%; background: var(--main);
+  }
+
+  /* ===== FAQ, 연락처 ===== */
+  .empty { padding: 36px 20px; border-radius: 10px; background: var(--box); color: var(--gray); text-align: center; }
+
+  /* ===== 자주 묻는 질문: 누르면 펼치고 다시 누르면 접는다 ===== */
+  .faq details { border-top: 1px solid var(--line); }
+  .faq details:last-child { border-bottom: 1px solid var(--line); }
+  .faq summary {
+    position: relative; display: flex; gap: 12px; min-height: 44px; padding: 18px 40px 18px 0;
+    font-weight: 600; cursor: pointer; list-style: none;
+  }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::before { content: "Q"; font-weight: 700; color: var(--main); }
+  .faq summary::after {
+    content: "+"; position: absolute; right: 6px; top: 14px;
+    font-size: 1.4rem; font-weight: 400; color: var(--gray);
+  }
+  .faq summary:hover { color: var(--main); }
+  .faq details[open] summary::after { content: "−"; color: var(--main); }
+  .faq details p { padding: 0 40px 22px 26px; }
+  .contact a { font-weight: 600; }
+  footer { padding: 32px 0; font-size: .85rem; color: var(--gray); text-align: center; }
+
+  /* ===== 휴대폰 ===== */
+  @media (max-width: 900px) {
+    .menu-btn { display: flex; }
+    .nav {
+      display: none; position: absolute; left: 0; right: 0; top: 100%;
+      flex-direction: column; gap: 0; padding: 8px 20px 16px;
+      background: var(--bg); border-bottom: 1px solid var(--line);
+    }
+    .nav.open { display: flex; }
+    .nav a { padding: 13px 4px; font-size: 1rem; border-bottom: 1px solid var(--line); border-radius: 0; }
+    .skills { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 680px) {
+    .hero .wrap { grid-template-columns: 1fr; padding: 56px 0 48px; }
+    .hero svg { max-width: 220px; justify-self: start; order: -1; }
+    section[id] { padding: 56px 0; }
+    .sec-head { margin-bottom: 28px; }
+    .sec-head h2 { font-size: 1.35rem; }
+    .about { grid-template-columns: 1fr; gap: 24px; }
+    .about .ph { width: 150px; }
+    .about p { font-size: 1.05rem; }
+    .rows > div, .detail > div { grid-template-columns: 1fr; gap: 2px; }
+    .cards, .skills { grid-template-columns: 1fr; }
+    .card-body { padding: 20px; }
+    .pop { padding: 24px 20px; }
+  }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+</style>
+</head>
+<body>
+
+<!-- ===== 위쪽 메뉴 ===== -->
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top">김태원</a>
+    <button class="menu-btn" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="nav"><span></span></button>
+    <nav class="nav" id="nav">
+      <a href="#about">소개</a>
+      <a href="#study">전공·학업</a>
+      <a href="#projects">대표 경험</a>
+      <a href="#skills">역량</a>
+      <a href="#certs">자격·교육</a>
+      <a href="#activities">대외활동</a>
+      <a href="#faq">FAQ</a>
+      <a href="#contact">연락처</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ===== 첫 화면: 사이트 제목, 한 줄 소개, 키워드 3개 ===== -->
+  <div class="hero">
+    <div class="wrap">
+      <div>
+        <p class="site">김태원 | 기계시스템공학 학업 포트폴리오</p>
+        <h1><em>현장</em>을 이해하고,<br><em>데이터</em>를 통해 개선하는 엔지니어</h1>
+        <ul class="keywords">
+          <li>제조·품질관리</li>
+          <li>공정 개선</li>
+          <li>스마트 제조</li>
+        </ul>
+      </div>
+      <!-- 장식용 선 그림 (내용 없음) -->
+      <svg viewBox="0 0 400 400" fill="none" stroke="#1F4E9A" stroke-width="1" aria-hidden="true">
+        <g opacity=".22">
+          <line x1="200" y1="10" x2="200" y2="390" stroke-dasharray="14 5 2 5"/>
+          <line x1="10" y1="200" x2="390" y2="200" stroke-dasharray="14 5 2 5"/>
+          <circle cx="200" cy="200" r="170" stroke-dasharray="2 9" stroke-width="7"/>
+        </g>
+        <circle cx="200" cy="200" r="150" opacity=".35"/>
+        <circle cx="200" cy="200" r="104" opacity=".6"/>
+        <circle cx="200" cy="200" r="52" stroke-dasharray="5 5" opacity=".5"/>
+        <line x1="274" y1="126" x2="340" y2="60" opacity=".7"/>
+        <line x1="340" y1="60" x2="388" y2="60" opacity=".7"/>
+        <g fill="#1F4E9A" stroke="none">
+          <circle cx="200" cy="200" r="5"/>
+          <circle cx="274" cy="126" r="5"/>
+          <circle cx="200" cy="50" r="3.5"/>
+          <circle cx="50" cy="200" r="3.5"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <!-- ===== 01 소개 ===== -->
+  <section id="about">
+    <div class="wrap">
+      <div class="sec-head"><span class="no">01</span><h2>소개</h2></div>
+      <div class="about">
+        <div class="ph">images/IDpicture.jpg<img src="images/IDpicture.jpg" alt="김태원" onerror="this.remove()"></div>
+        <p>현대자동차에서 약 22개월 동안 수출선적, 의장, 품질관리 업무를 했다. 지금은 경상국립대학교 기계시스템공학과 3학년으로, 제조 현장의 문제를 찾아 원인을 분석하고 개선하는 품질 엔지니어를 목표로 공부하고 있다.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 02 전공·학업 ===== -->
+  <section id="study">
+    <div class="wrap">
+      <div class="sec-head"><span class="no">02</span><h2>전공·학업</h2></div>
+      <dl class="rows">
+        <div><dt>주전공</dt><dd>경상국립대학교 해양과학대학 기계시스템공학과 (3학년)</dd></div>
+        <div><dt>융합전공</dt><dd>친환경스마트선박설계 (이수 중)</dd></div>
+        <div><dt>마이크로디그리</dt><dd>품질빅데이터 (이수 중)</dd></div>
+        <div><dt>마이크로디그리</dt><dd>항공드론기계시스템 (이수 중)</dd></div>
+        <div><dt>과목별 배운 것·만든 것 4~6개</dt><dd><span class="todo">확인 필요 (자료에 과목명이 없다)</span></dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ===== 03 대표 경험 ===== -->
+  <section id="projects">
+    <div class="wrap">
+      <div class="sec-head"><span class="no">03</span><h2>대표 경험</h2></div>
+      <div class="cards">
+
+        <article class="card">
+          <div class="ph">images/project-1.jpg<img src="images/project-1.jpg" alt="" onerror="this.remove()"></div>
+          <div class="card-body">
+            <p class="no">01</p>
+            <h3>현대자동차 제조·품질관리</h3>
+            <p class="meta">2024.01–2025.11, 약 22개월</p>
+            <p class="desc">현대자동차에서 약 22개월 동안 의장공정 조립과 차량 검사를 했다.<br>흡기호스와 사이드브레이크 검사에 대해 개선 의견을 제안했다.</p>
+            <button class="more" type="button" data-open="detail-1">자세히 보기</button>
+          </div>
+          <!-- 팝업 1 -->
+          <dialog id="detail-1" aria-labelledby="detail-1-title">
+            <div class="pop">
+              <button class="x" type="button" data-close aria-label="닫기">×</button>
+              <p class="no">01</p>
+              <h3 id="detail-1-title">현대자동차 제조·품질관리</h3>
+              <p class="meta">2024.01–2025.11, 약 22개월</p>
+              <dl class="detail">
+                <div><dt>배경</dt><dd>2024년 1월부터 2025년 11월까지 약 22개월 동안 현대자동차 수출선적부, 의장22부, 품질관리3부에서 일했다.</dd></div>
+                <div><dt>내 역할</dt><dd>수출선적 관련 현장업무, 의장공정 부품 조립과 전장배선, 차량 기능·엔진·샤시 검사, ROLL·ROAD 검사공정을 했다. 신규 인원에게 현장업무를 교육했다.</dd></div>
+                <div><dt>과정</dt><dd>흡기호스와 사이드브레이크 검사에 대해 개선 의견을 제안했다.</dd></div>
+                <div><dt>배운 점</dt><dd>여러 부서를 거치며 공정의 흐름과 검사 기준의 중요성을 배웠다.</dd></div>
+              </dl>
+              <p class="src">근거 자료: portfolio_TaeWon.pdf 2쪽</p>
+            </div>
+          </dialog>
+        </article>
+
+        <article class="card">
+          <div class="ph">images/project-2.jpg<img src="images/project-2.jpg" alt="" onerror="this.remove()"></div>
+          <div class="card-body">
+            <p class="no">02</p>
+            <h3>IT 인프라 실무</h3>
+            <p class="meta">약 5개월</p>
+            <p class="desc">약 5개월 동안 경찰청 서버와 교육청 무선 네트워크 장비 관련 업무를 했다.<br>무선 AP·PoE 장비를 설정하고 납품 관련 문서를 작성했다.</p>
+            <button class="more" type="button" data-open="detail-2">자세히 보기</button>
+          </div>
+          <!-- 팝업 2 -->
+          <dialog id="detail-2" aria-labelledby="detail-2-title">
+            <div class="pop">
+              <button class="x" type="button" data-close aria-label="닫기">×</button>
+              <p class="no">02</p>
+              <h3 id="detail-2-title">IT 인프라 실무</h3>
+              <p class="meta">약 5개월</p>
+              <dl class="detail">
+                <div><dt>배경</dt><dd>약 5개월 동안 경찰청 서버와 교육청 무선 네트워크 장비 관련 IT 인프라 업무를 했다.</dd></div>
+                <div><dt>과정</dt><dd>서버·네트워크 관련 작업, 무선 AP·PoE 장비 설정, 장비 입출고 관리, 납품 관련 문서 작성을 했다.</dd></div>
+              </dl>
+              <p class="src">근거 자료: portfolio_TaeWon.pdf 2쪽</p>
+            </div>
+          </dialog>
+        </article>
+
+        <article class="card">
+          <div class="ph">images/project-3.jpg<img src="images/project-3.jpg" alt="" onerror="this.remove()"></div>
+          <div class="card-body">
+            <p class="no">03</p>
+            <h3>KDI 열린혁신정책플랫폼 영워킹그룹 정책제안 프로젝트</h3>
+            <p class="meta">2022년</p>
+            <p class="desc">2022년 KDI 영워킹그룹 정책제안 프로젝트에 참여했다.<br>귀어 활성화 아이디어를 기획했고 프로젝트 총괄을 맡았다.</p>
+            <button class="more" type="button" data-open="detail-3">자세히 보기</button><a class="more" href="https://youtu.be/Ur8zKeKWAW4" target="_blank" rel="noopener">영상 보기 ↗</a>
+          </div>
+          <!-- 팝업 3 -->
+          <dialog id="detail-3" aria-labelledby="detail-3-title">
+            <div class="pop">
+              <button class="x" type="button" data-close aria-label="닫기">×</button>
+              <p class="no">03</p>
+              <h3 id="detail-3-title">KDI 열린혁신정책플랫폼 영워킹그룹 정책제안 프로젝트</h3>
+              <p class="meta">2022년</p>
+              <dl class="detail">
+                <div><dt>배경</dt><dd>2022년 KDI 열린혁신정책플랫폼 영워킹그룹의 정책제안 프로젝트에 참여했다.</dd></div>
+                <div><dt>내 역할</dt><dd>아이디어 발굴·제안과 프로젝트 총괄을 맡았다.</dd></div>
+                <div><dt>과정</dt><dd>귀어 활성화 관련 아이디어를 기획했고, 정책 문제를 검토하는 팀 활동에 참여했다.</dd></div>
+              </dl>
+              <p class="src">근거 자료: portfolio_TaeWon.pdf 4쪽, 10쪽</p>
+            </div>
+          </dialog>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 04 역량 ===== -->
+  <section id="skills">
+    <div class="wrap">
+      <div class="sec-head"><span class="no">04</span><h2>역량</h2></div>
+      <ul class="skills">
+        <li><strong>차량 검사 (기능·엔진·샤시, ROLL·ROAD 검사공정)</strong><span>현대자동차 품질관리</span></li>
+        <li><strong>의장공정 부품 조립, 전장배선</strong><span>현대자동차 의장</span></li>
+        <li><strong>검사 개선 의견 제안 (흡기호스, 사이드브레이크)</strong><span>현대자동차</span></li>
+        <li><strong>신규 인원 현장업무 교육</strong><span>현대자동차</span></li>
+        <li><strong>품질·환경경영시스템 (ISO 9001, ISO 14001)</strong><span>국제심사원(보) 과정 수료</span></li>
+        <li><strong>네트워크 장비 설정 (무선 AP, PoE)</strong><span>IT 인프라 실무</span></li>
+        <li><strong>납품 문서 작성, 장비 입출고 관리</strong><span>IT 인프라 실무</span></li>
+        <li><strong>영어 말하기 (OPIc IM2)</strong></li>
+        <li><strong>사용 소프트웨어·도구 (CAD, 해석, 데이터 분석 등)</strong><span class="todo">확인 필요</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===== 05 자격·교육 ===== -->
+  <section id="certs">
+    <div class="wrap">
+      <div class="sec-head"><span class="no">05</span><h2>자격·교육</h2></div>
+      <ul class="list">
+        <li>ISO 9001 국제심사원(보) 과정 수료, 수료증 발급 (UCR인증원)</li>
+        <li>ISO 14001 국제심사원(보) 과정 수료 (UCR인증원)</li>
+        <li>OPIc IM2</li>
+        <li>GNU 프렌카운슬러 16기 (기초·심화·보수교육 수료)</li>
+        <li>경상국립대학교 공식 비교과 112개 이수, 총역량점수 338.2점 (2026.11.12 기준)</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===== 06 대외활동 ===== -->
+  <section id="activities">
+    <div class="wrap">
+      <div class="sec-head"><span class="no">06</span><h2>대외활동</h2></div>
+      <ul class="list">
+        <li>2026 KAI 부울경 연합 직무체험 멘토링 캠프 (2026년 1학기)</li>
+        <li>한국동서발전 EWP 직무이해 캠프 (2026년 하계)</li>
+        <li>친환경 스마트선박 연구현장 견학: KRISO, 삼성중공업 대덕 (2026년 10월)</li>
+        <li>과학키트 제작 재능기부, 과학축전·과학대전 부스 운영 (2011년, 2016년, 2017년 삼호초등학교, 우신고등학교)</li>
+        <li>생산기술·공장최적화 부트캠프 (코맨토, 2026년 7~8월, 4M생산기술*생산관리)</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===== 07 FAQ (2일차에 채운다) ===== -->
+  <section id="faq">
+    <div class="wrap">
+      <div class="sec-head"><span class="no">07</span><h2>자주 묻는 질문</h2></div>
+      <div class="faq">
+        <details>
+          <summary>전공 공부는 현장 경험과 어떻게 이어지나요?</summary>
+          <p>현장 실무와 기계공학 이론을 연결하는 엔지니어를 목표로 하고 있다. 대학에서 기계공학을 공부하며 설계, 열유체 해석, 제조 데이터 분석으로 관심 분야를 넓히고 있다.</p>
+        </details>
+        <details>
+          <summary>현대자동차에서 무엇을 배웠나요?</summary>
+          <p>여러 부서를 거치며 공정의 흐름과 검사 기준의 중요성을 배웠다.</p>
+        </details>
+        <details>
+          <summary>어떤 전문교육을 받았나요?</summary>
+          <p>ISO 9001·ISO 14001 국제심사원(보) 과정을 수료했다. 2026년 11월 12일 기준 경상국립대학교 비교과 프로그램 112개가 공식 이수 내역서에 기록되어 있다.</p>
+        </details>
+        <details>
+          <summary>앞으로 어떤 엔지니어가 되고 싶나요?</summary>
+          <p>현장의 문제를 정확하게 이해하고, 공학적 분석과 데이터를 활용해 원인을 규명하며 개선방안을 제시하는 엔지니어가 되는 것이 목표다.</p>
+        </details>
+        <details>
+          <summary>다른 사람을 가르치거나 도운 경험이 있나요?</summary>
+          <p>현대자동차에서 신규 인원에게 현장업무를 교육했다. GNU 프렌카운슬러 기초·심화·보수교육도 수료했다. 실제 또래 상담 활동은 아직 하지 않았다.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 08 연락처 ===== -->
+  <section id="contact">
+    <div class="wrap">
+      <div class="sec-head"><span class="no">08</span><h2>연락처</h2></div>
+      <dl class="rows contact">
+        <div><dt>공개용 이메일</dt><dd><a href="mailto:maxmatt@gnu.ac.kr">maxmatt@gnu.ac.kr</a></dd></div>
+        <div><dt>GitHub 주소</dt><dd><span class="todo">확인 필요</span></dd></div>
+      </dl>
+    </div>
+  </section>
+
+</main>
+
+<footer>김태원 | 기계시스템공학 학업 포트폴리오</footer>
+
+<script>
+  // 메뉴를 누르면 해당 섹션으로 부드럽게 이동한다
+  var nav = document.getElementById('nav');
+  var btn = document.querySelector('.menu-btn');
+  var links = nav.querySelectorAll('a');
+  var smooth = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+
+  function closeMenu() {
+    nav.classList.remove('open');
+    btn.setAttribute('aria-expanded', 'false');
+  }
+
+  btn.addEventListener('click', function () {
+    var open = nav.classList.toggle('open');
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+
+  document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      var target = document.querySelector(a.getAttribute('href'));
+      if (!target) return;
+      e.preventDefault();
+      closeMenu();
+      target.scrollIntoView({ behavior: smooth, block: 'start' });
+    });
+  });
+
+  // '자세히 보기' 팝업: 버튼으로 열고, × 버튼이나 바깥쪽을 누르면 닫는다 (Esc 키도 된다)
+  document.querySelectorAll('[data-open]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var d = document.getElementById(b.getAttribute('data-open'));
+      if (d && d.showModal) d.showModal();
+    });
+  });
+  document.querySelectorAll('dialog').forEach(function (d) {
+    d.addEventListener('click', function (e) {
+      if (e.target === d || e.target.hasAttribute('data-close')) d.close();
+    });
+  });
+
+  // 지금 보고 있는 섹션의 메뉴를 남색으로 표시한다
+  if ('IntersectionObserver' in window) {
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        links.forEach(function (a) {
+          a.classList.toggle('on', a.getAttribute('href') === '#' + entry.target.id);
+        });
+      });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    document.querySelectorAll('section[id]').forEach(function (s) { observer.observe(s); });
+  }
+</script>
+</body>
+</html>
